@@ -1,8 +1,9 @@
 const express=require('express');
-const mongoose=require('mongoose')
+const mongoose=require('mongoose');
 const ejs=require('ejs');
-const path=require('path');
+const path=require('path')
 const Person=require('./Models/Form')
+
 
 const app=express();
 
@@ -10,8 +11,9 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
 app.set("view engine","ejs");
+const url="mongodb+srv://rishabhporwal2001:B2UfV1RqusJmyiFo@cluster0.qbcr4.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
-const connect=mongoose.connect('mongodb://127.0.0.1:27017/forms')
+const connect=mongoose.connect(url)
 
 connect.then(()=>{
     console.log("database connected");
