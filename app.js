@@ -3,7 +3,7 @@ const mongoose=require('mongoose');
 const ejs=require('ejs');
 const path=require('path')
 const Person=require('./Models/Form')
-
+require('dotenv').config();
 
 const app=express();
 
@@ -11,17 +11,18 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
 app.set("view engine","ejs");
-const url="mongodb+srv://rishabhporwal2001:B2UfV1RqusJmyiFo@cluster0.qbcr4.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const dbURL=process.env.URL;
 
-const connect=mongoose.connect(url)
-
-connect.then(()=>{
-    console.log("database connected");
-}).catch(()=>{
-    console.log('database cannot be craeted')
-
-
-})
+mongoose.connect(dbURL, {
+    useNewUrlParser: true,    // Recommended options
+    useUnifiedTopology: true, 
+  })
+  .then(() => {
+    console.log("Database connected");
+  })
+  .catch((error) => {
+    console.error("Database connection failed:", error);
+  });
 
 app.get('/',(req,res)=>{
     res.send("hello")
@@ -89,6 +90,20 @@ app.post('/form/update/:id', async (req, res) => {
     }
 });
 
+app.get('/form/:id', async (req, res) => {
+    try {
+      const user = await Person.findById(req.params.id);
+      if (!user) {
+        return res.status(404).send({ message: 'User not found' });
+      }
+      console.log(user);
+      res.status(200).send(user);  // Send user data to the client
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({ message: 'Server error' });
+    }
+  });
+  
 
 
 const port=4080;
