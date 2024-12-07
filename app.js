@@ -13,10 +13,7 @@ app.use(express.urlencoded({extended:true}));
 app.set("view engine","ejs");
 const dbURL=process.env.URL;
 
-mongoose.connect(dbURL, {
-    useNewUrlParser: true,    // Recommended options
-    useUnifiedTopology: true, 
-  })
+mongoose.connect(dbURL)
   .then(() => {
     console.log("Database connected");
   })
