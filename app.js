@@ -101,6 +101,26 @@ app.get('/form/:id', async (req, res) => {
     }
   });
   
+  app.post('/form/:id', async (req, res) => {
+    if (req.body._method === 'DELETE') {
+      try {
+        const user = await Person.findByIdAndDelete(req.params.id);
+        
+        if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+        }
+  
+        console.log(user); // Optionally log the deleted user
+        res.redirect('/form'); // Redirect to the form after deletion
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+      }
+    } else {
+      res.status(400).json({ message: 'Invalid method' });
+    }
+  });
+  
 
 
 const port=4080;
